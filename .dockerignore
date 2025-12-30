@@ -32,8 +32,12 @@ docker-compose*.yml
 *.sqlite3
 db.sqlite3
 
+# Node
+node_modules
+
 # Static files (will be collected during build)
 staticfiles
+static/dist
 
 # Testing
 .pytest_cache

@@ -1,7 +1,23 @@
 # syntax=docker/dockerfile:1
 
 # ============================================
-# Base stage - common settings
+# Frontend builder stage
+# ============================================
+FROM node:22-alpine AS frontend-builder
+
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Copy source and build
+COPY tsconfig.json vite.config.ts ./
+COPY src ./src
+RUN npm run build
+
+# ============================================
+# Python base stage
 # ============================================
 FROM python:3.13-slim AS base
 
@@ -11,9 +27,9 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # ============================================
-# Builder stage - install dependencies
+# Python builder stage
 # ============================================
-FROM base AS builder
+FROM base AS python-builder
 
 # Install uv for fast dependency management
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
@@ -32,14 +48,17 @@ RUN groupadd --gid 1000 appgroup \
     && useradd --uid 1000 --gid appgroup --shell /bin/bash appuser
 
 # Copy virtual environment from builder
-COPY --from=builder /app/.venv /app/.venv
+COPY --from=python-builder /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 
 # Copy application code
 COPY --chown=appuser:appgroup . .
 
+# Copy built frontend assets
+COPY --from=frontend-builder --chown=appuser:appgroup /app/static/dist ./static/dist
+
 # Collect static files
-RUN python manage.py collectstatic --noinput --clear 2>/dev/null || true
+RUN python manage.py collectstatic --noinput --clear
 
 USER appuser
 
@@ -48,7 +67,7 @@ EXPOSE 8000
 CMD ["gunicorn", "fxjurnal.wsgi:application", "--bind", "0.0.0.0:8000"]
 
 # ============================================
-# Development stage
+# Development stage (Python only)
 # ============================================
 FROM base AS development
 

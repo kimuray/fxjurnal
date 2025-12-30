@@ -1,6 +1,30 @@
-.venv
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+
+# Node.js
+node_modules/
+
+# Environment
 .env
-__pycache__
-*.pyc
+.env.local
+.env.*.local
+
+# Django
 staticfiles/
 db.sqlite3
+
+# Vite build output
+static/dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

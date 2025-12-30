@@ -1,0 +1,14 @@
+{% load django_vite %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FX Journal{% endblock %}</title>
+    {% vite_hmr_client %}
+    {% vite_asset 'main.ts' %}
+</head>
+<body>
+    {% block content %}{% endblock %}
+</body>
+</html>
