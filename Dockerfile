@@ -13,7 +13,7 @@ RUN npm ci
 
 # Copy source and build
 COPY tsconfig.json vite.config.ts ./
-COPY src ./src
+COPY static/src ./static/src
 RUN npm run build
 
 # ============================================

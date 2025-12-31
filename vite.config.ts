@@ -4,7 +4,7 @@ import { resolve } from "path";
 
 export default defineConfig({
   plugins: [vue()],
-  root: resolve("./src"),
+  root: resolve("./static/src"),
   base: "/static/",
   server: {
     host: "0.0.0.0",
@@ -17,13 +17,13 @@ export default defineConfig({
     manifest: "manifest.json",
     rollupOptions: {
       input: {
-        main: resolve("./src/main.ts"),
+        main: resolve("./static/src/main.ts"),
       },
     },
   },
   resolve: {
     alias: {
-      "@": resolve("./src"),
+      "@": resolve("./static/src"),
     },
   },
 });
