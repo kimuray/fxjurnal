@@ -19,7 +19,7 @@ RUN npm run build
 # ============================================
 # Python base stage
 # ============================================
-FROM python:3.13-slim AS base
+FROM python:3.14-slim AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -64,7 +64,7 @@ USER appuser
 
 EXPOSE 8000
 
-CMD ["gunicorn", "fxjurnal.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
 
 # ============================================
 # Development stage (Python only)

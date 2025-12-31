@@ -21,7 +21,7 @@ services:
       target: development
     volumes:
       - .:/app
-      - /app/.venv
+      - app_venv:/app/.venv
     ports:
       - "8000:8000"
     environment:
@@ -35,6 +35,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    command: sh -c "uv sync && python manage.py runserver 0.0.0.0:8000"
 
   vite:
     image: node:22-alpine
@@ -49,3 +50,4 @@ services:
 volumes:
   postgres_data:
   node_modules:
+  app_venv:

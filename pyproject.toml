@@ -36,7 +36,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["fxjurnal", "trades"]
+known-first-party = ["config"]
 
 [tool.ruff.format]
 quote-style = "double"
